@@ -9,26 +9,28 @@ import java.util.Map;
  */
 class Solution {
     public boolean isValid(String s) {
-        Map<Character, Character> openToClosed = Map.of(
+        Map<Character, Character> openingToClosing = Map.of(
                 '(', ')',
                 '[', ']',
                 '{', '}'
         );
 
-        Deque<Character> openBrackets = new ArrayDeque<>();
+        Deque<Character> openingBrackets = new ArrayDeque<>();
         for (int i = 0; i < s.length(); i++) {
-            char brace = s.charAt(i);
+            char anotherBracket = s.charAt(i);
 
-            if (openToClosed.containsKey(brace)) {
-                openBrackets.push(brace);
+            if (openingToClosing.containsKey(anotherBracket)) {
+                openingBrackets.push(anotherBracket);
             } else {
-                boolean openingBracketsStackIsEmptyOrClosingBracketsIsNotMatchOpening
-                        = openBrackets.isEmpty() || !openToClosed.get(openBrackets.pop()).equals(brace);
-                if (openingBracketsStackIsEmptyOrClosingBracketsIsNotMatchOpening) {
+                if (openingBrackets.isEmpty()) {
+                    return false;
+                }
+                Character openingBracket = openingBrackets.pop();
+                if (!openingToClosing.get(openingBracket).equals(anotherBracket)) {
                     return false;
                 }
             }
         }
-        return openBrackets.isEmpty();
+        return openingBrackets.isEmpty();
     }
 }
